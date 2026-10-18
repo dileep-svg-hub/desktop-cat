@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title>icons</title></head>
+<body>
+<!-- Used by tools/make-icons.js: draws the kitten's head as icons, using the real kitten drawing code. -->
+<script src="../src/renderer/kitten.js"></script>
+<script>
+// Draw the head to fill a size x size square. withBackground: the app icon gets a soft round tile.
+function icon(size, withBackground) {
+  const c = document.createElement('canvas');
+  c.width = c.height = size;
+  const ctx = c.getContext('2d');
+  if (withBackground) {
+    const r = size * 0.22, m = size * 0.04;
+    ctx.beginPath();
+    ctx.roundRect(m, m, size - 2 * m, size - 2 * m, r);
+    const g = ctx.createLinearGradient(0, 0, 0, size);
+    g.addColorStop(0, '#fff3df');
+    g.addColorStop(1, '#ffd9b0');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.lineWidth = size * 0.012;
+    ctx.strokeStyle = '#e9b98a';
+    ctx.stroke();
+  }
+  // The head is about 34 units wide (with whiskers) and 33 tall (ears to chin), centred on (0, -4).
+  const fill = withBackground ? 0.78 : 1;
+  const k = (size * fill) / 35;
+  ctx.translate(size / 2, size / 2 + (withBackground ? size * 0.03 : 0));
+  ctx.scale(k, k);
+  ctx.translate(0, 4);
+  head(ctx, 0, 0, { eyes: 'open', noBlink: true, twitch: 0, mouth: 'smile' });
+  return c.toDataURL('image/png');
+}
+window.icons = {
+  'tray.png': icon(16, false),
+  'tray@2x.png': icon(32, false),
+  'icon.png': icon(1024, true),
+};
+</script>
+</body>
+</html>

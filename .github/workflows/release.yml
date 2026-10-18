@@ -1,0 +1,70 @@
+# GitHub Actions: GitHub's own computers build the installers for you.
+#
+# When you publish a Release on GitHub, this starts two machines in the cloud:
+# a Windows one (makes Desktop-Cat-Setup-x.y.z.exe) and a Mac one (makes the
+# .dmg and .zip apps). Each one downloads the code, installs what it needs,
+# builds, and attaches the files to your Release so people can download them.
+# You can watch it happen in the "Actions" tab of your repository (~10 minutes).
+#
+# "Run workflow" on the Actions tab also works (for a test build without a
+# release); the files then appear as a download at the bottom of that run.
+
+name: Build installers
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: write          # allowed to attach files to the Release
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install the libraries (npm ci)
+        run: npm ci
+
+      - name: Build the Windows installer
+        if: runner.os == 'Windows'
+        run: npx electron-builder --win --publish never
+
+      - name: Build the Mac apps (unsigned)
+        if: runner.os == 'macOS'
+        run: npx electron-builder --mac --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: false   # we don't have an Apple signing certificate
+
+      - name: Attach the installers to the Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.zip
+
+      - name: Keep the files (test builds)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: installers-${{ runner.os }}
+          path: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.zip

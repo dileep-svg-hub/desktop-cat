@@ -1,0 +1,87 @@
+{
+  "name": "desktop-cat",
+  "productName": "Desktop Cat",
+  "version": "0.1.0",
+  "description": "A fluffy orange kitten that lives on your desktop: it naps, plays, climbs its cat tree and chases sparrows.",
+  "main": "src/main/main.js",
+  "author": "dileep-svg-hub",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "icons": "electron tools/make-icons.js",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac"
+  },
+  "build": {
+    "appId": "com.desktopcat.app",
+    "productName": "Desktop Cat",
+    "copyright": "Copyright © 2026 dileep-svg-hub",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/get-windows/**",
+      "node_modules/@nut-tree-fork/**"
+    ],
+    "npmRebuild": false,
+    "icon": "assets/icons/icon.png",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Desktop Cat",
+      "artifactName": "Desktop-Cat-Setup-${version}.${ext}"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "category": "public.app-category.entertainment",
+      "identity": null,
+      "artifactName": "Desktop-Cat-${version}-mac-${arch}.${ext}"
+    },
+    "publish": null
+  },
+  "devDependencies": {
+    "electron": "^44.9.0",
+    "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "@nut-tree-fork/nut-js": "^4.2.6",
+    "get-windows": "^9.3.0"
+  },
+  "allowScripts": {
+    "get-windows@9.3.0": true,
+    "electron@44.9.0": true
+  }
+}

@@ -1,0 +1,22 @@
+/* The page background must stay transparent, or the whole window shows up as a box. */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;          /* no accidental text selection while dragging the cat */
+  -webkit-user-select: none;
+}
+
+#stage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+/* When the pointer is over the cat we switch to a hand cursor (set from JS). */
+#stage.over-cat { cursor: grab; }
+#stage.grabbing { cursor: grabbing; }

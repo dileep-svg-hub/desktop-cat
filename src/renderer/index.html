@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Security rule: this page may only load its own files, nothing from the internet. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:">
+  <title>Desktop Cat</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- The whole window is one drawing surface. The cat is painted onto it. -->
+  <canvas id="stage"></canvas>
+
+  <script src="kitten.js"></script>
+  <script src="props.js"></script>
+  <script src="sounds.js"></script>
+  <script src="cat.js"></script>
+</body>
+</html>

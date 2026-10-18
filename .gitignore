@@ -1,0 +1,14 @@
+# Downloaded libraries (re-created by `npm install`; never commit these)
+node_modules/
+
+# Built installers (re-created by `npm run build`)
+dist/
+
+# Backups and scratch files (not part of the app)
+Claude outputs/
+
+# Editor / OS clutter
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
